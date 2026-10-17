@@ -12,9 +12,16 @@ let cached: Env | undefined;
 
 /** Validated lazily so `next build` works without runtime secrets. */
 export function getEnv(): Env {
-  cached ??= envSchema.parse({
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  });
+  if (!cached) {
+    const result = envSchema.safeParse({
+      SUPABASE_URL: process.env.SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    });
+    if (!result.success) {
+      // A plain Error (not ZodError) so it surfaces as a 500, not as invalid client input.
+      throw new Error(`Invalid server environment: ${z.prettifyError(result.error)}`);
+    }
+    cached = result.data;
+  }
   return cached;
 }
