@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_rethrow } from "next/navigation";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -24,6 +25,8 @@ export function withErrorHandling<Args extends unknown[]>(
     try {
       return await handler(...args);
     } catch (error) {
+      // Let Next.js internal control-flow errors (e.g. prerender bail-out) propagate.
+      unstable_rethrow(error);
       if (error instanceof AppError) {
         return errorResponse(error.code, error.message, error.status);
       }
