@@ -18,7 +18,8 @@ export type GameState =
   | { phase: "feedback"; sessionId: string; question: NextQuestionResponse; feedback: Feedback }
   | { phase: "finished"; sessionId: string; result: GameResultResponse }
   | { phase: "saved"; sessionId: string; result: GameResultResponse; saved: SaveScoreResponse }
-  | { phase: "error"; code: string; message: string };
+  /** `sessionId` is set when the game can be resumed after the error. */
+  | { phase: "error"; code: string; message: string; sessionId?: string };
 
 type Action =
   | { type: "loading"; sessionId?: string }
@@ -29,7 +30,10 @@ type Action =
   | { type: "saved"; saved: SaveScoreResponse }
   | { type: "error"; code: string; message: string };
 
-function reducer(state: GameState, action: Action): GameState {
+// Errors after which the session itself is gone, so resuming it can't work.
+const FATAL_ERROR_CODES = new Set(["SESSION_NOT_FOUND", "SESSION_EXPIRED"]);
+
+export function gameReducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case "loading":
       return { phase: "loading", sessionId: action.sessionId };
@@ -45,8 +49,11 @@ function reducer(state: GameState, action: Action): GameState {
       return { phase: "finished", sessionId: action.sessionId, result: action.result };
     case "saved":
       return state.phase === "finished" ? { ...state, phase: "saved", saved: action.saved } : state;
-    case "error":
-      return { phase: "error", code: action.code, message: action.message };
+    case "error": {
+      const sessionId =
+        "sessionId" in state && !FATAL_ERROR_CODES.has(action.code) ? state.sessionId : undefined;
+      return { phase: "error", code: action.code, message: action.message, sessionId };
+    }
   }
 }
 
@@ -58,7 +65,7 @@ function toErrorAction(error: unknown): Action {
 }
 
 export function useGameMachine() {
-  const [state, dispatch] = useReducer(reducer, { phase: "idle" });
+  const [state, dispatch] = useReducer(gameReducer, { phase: "idle" });
   // Mirrors state for async callbacks and guards against double submissions.
   const stateRef = useRef<GameState>(state);
   const busyRef = useRef(false);
@@ -123,6 +130,28 @@ export function useGameMachine() {
     [run, loadQuestion],
   );
 
+  /**
+   * Picks the game up again after an error. A repeated /next returns the pending question
+   * without restarting its server-side timer; if the last answer did land, the game is over
+   * and /next answers GAME_NOT_IN_PROGRESS, so show the result instead.
+   */
+  const resume = useCallback(
+    () =>
+      run(async () => {
+        const current = stateRef.current;
+        if (current.phase !== "error" || current.sessionId === undefined) return;
+        const { sessionId } = current;
+        try {
+          await loadQuestion(sessionId);
+        } catch (error) {
+          if (!(error instanceof ApiClientError && error.code === "GAME_NOT_IN_PROGRESS")) throw error;
+          const result = await api.result(sessionId);
+          dispatch({ type: "finished", sessionId, result });
+        }
+      }),
+    [run, loadQuestion],
+  );
+
   /** Resolves to an error message for the form, or null on success. */
   const save = useCallback(async (nickname: string): Promise<string | null> => {
     const current = stateRef.current;
@@ -133,11 +162,22 @@ export function useGameMachine() {
       dispatch({ type: "saved", saved });
       return null;
     } catch (error) {
+      if (error instanceof ApiClientError && error.code === "ALREADY_SAVED") {
+        // An earlier attempt may have been saved even though its response never arrived:
+        // reload the result, which then reports the score as already saved.
+        try {
+          const result = await api.result(current.sessionId);
+          dispatch({ type: "finished", sessionId: current.sessionId, result });
+          return null;
+        } catch {
+          return error.message;
+        }
+      }
       return error instanceof ApiClientError ? error.message : "Erro inesperado. Tente novamente.";
     } finally {
       busyRef.current = false;
     }
   }, []);
 
-  return { state, start, answer, advance, save };
+  return { state, start, answer, advance, resume, save };
 }

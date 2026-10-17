@@ -17,7 +17,15 @@ export class ApiClientError extends Error {
   }
 }
 
+// A hung request would otherwise leave the game stuck in "submitting" forever.
+const REQUEST_TIMEOUT_MS = 10_000;
+
+function networkError(): ApiClientError {
+  return new ApiClientError("NETWORK_ERROR", "Falha de conexão. Verifique sua internet.", 0);
+}
+
 async function request<T>(path: string, init?: { method?: string; body?: unknown }): Promise<T> {
+  const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
   let res: Response;
   try {
     res = await fetch(path, {
@@ -25,11 +33,13 @@ async function request<T>(path: string, init?: { method?: string; body?: unknown
       headers: init?.body === undefined ? undefined : { "content-type": "application/json" },
       body: init?.body === undefined ? undefined : JSON.stringify(init.body),
       cache: "no-store",
+      signal,
     });
   } catch {
-    throw new ApiClientError("NETWORK_ERROR", "Falha de conexão. Verifique sua internet.", 0);
+    throw networkError();
   }
   const data: unknown = await res.json().catch(() => null);
+  if (signal.aborted) throw networkError();
   if (!res.ok) {
     const error = (data as ApiError | null)?.error;
     throw new ApiClientError(

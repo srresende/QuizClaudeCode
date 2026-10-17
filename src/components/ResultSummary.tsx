@@ -73,8 +73,13 @@ export function ResultSummary({ result, saved, onSave, onPlayAgain }: ResultSumm
             <span aria-hidden className="text-success">✓ </span>
             Salvo! Você ficou em <strong className="text-accent">#{saved.position}</strong> no ranking.
           </p>
+        ) : isSaved ? (
+          <p className="text-center text-muted" role="status">
+            <span aria-hidden className="text-success">✓ </span>
+            Pontuação já salva no ranking.
+          </p>
         ) : (
-          !isSaved && <NicknameForm onSave={onSave} />
+          <NicknameForm onSave={onSave} />
         )}
 
         <div className="flex flex-col gap-3 sm:flex-row">

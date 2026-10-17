@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { Feedback as FeedbackData } from "@/hooks/useGameMachine";
+import { feedbackTitle } from "@/lib/feedback";
 
 interface FeedbackProps {
   feedback: FeedbackData;
@@ -16,17 +17,16 @@ export function Feedback({ feedback, onNext }: FeedbackProps) {
     nextRef.current?.focus();
   }, []);
 
-  const title = correct ? "Correto!" : timedOut ? "Tempo esgotado" : "Incorreto";
-
   return (
-    <div className="space-y-4" role="status">
+    <div className="space-y-4">
+      {/* Not a live region: it mounts already filled, so GameScreen announces the verdict instead. */}
       <p
-        className={`flex items-center gap-2 text-xl font-semibold ${correct ? "text-success" : "text-error"}`}
+        className={`flex flex-wrap items-center gap-2 text-xl font-semibold ${correct ? "text-success" : "text-error"}`}
       >
         <span aria-hidden className="font-mono">
           {correct ? "✓" : "✗"}
         </span>
-        {title}
+        {feedbackTitle({ correct, timedOut, correctAnswer })}
       </p>
 
       {correct ? (

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useGameMachine } from "@/hooks/useGameMachine";
 import { useKeyboardShortcuts, type KeyMap } from "@/hooks/useKeyboardShortcuts";
-import { TIME_LIMIT_MS } from "@/lib/constants";
+import { feedbackAnnouncement } from "@/lib/feedback";
 import { AnswerButtons } from "./AnswerButtons";
 import { Feedback } from "./Feedback";
 import { QuestionCard } from "./QuestionCard";
@@ -13,8 +13,20 @@ import { ResultSummary } from "./ResultSummary";
 import { TerminalWindow } from "./TerminalWindow";
 import { Timer } from "./Timer";
 
+interface QuestionTimerProps {
+  questionIndex: number;
+  timeLimitMs: number;
+  onExpire: () => void;
+}
+
+/** Owns the countdown so its 100ms ticks re-render only the timer, not the whole game screen. */
+function QuestionTimer({ questionIndex, timeLimitMs, onExpire }: QuestionTimerProps) {
+  const remainingMs = useCountdown(timeLimitMs, true, questionIndex, onExpire);
+  return <Timer remainingMs={remainingMs} totalMs={timeLimitMs} />;
+}
+
 export function GameScreen() {
-  const { state, start, answer, advance, save } = useGameMachine();
+  const { state, start, answer, advance, resume, save } = useGameMachine();
   const startedRef = useRef(false);
 
   useEffect(() => {
@@ -23,14 +35,7 @@ export function GameScreen() {
     void start();
   }, [start]);
 
-  const inQuestion = state.phase === "question";
-  const questionIndex = inQuestion ? state.question.index : -1;
-  const remainingMs = useCountdown(
-    inQuestion ? state.question.timeLimitMs : TIME_LIMIT_MS,
-    inQuestion,
-    questionIndex,
-    useCallback(() => void answer(null), [answer]),
-  );
+  const expire = useCallback(() => void answer(null), [answer]);
 
   const keyMap = useMemo((): KeyMap => {
     if (state.phase === "question") {
@@ -78,13 +83,21 @@ export function GameScreen() {
             />
             {state.phase === "question" ? (
               <>
-                <Timer remainingMs={remainingMs} totalMs={question.timeLimitMs} />
+                <QuestionTimer
+                  questionIndex={question.index}
+                  timeLimitMs={question.timeLimitMs}
+                  onExpire={expire}
+                />
                 <AnswerButtons disabled={state.submitting} onAnswer={(v) => void answer(v)} />
               </>
             ) : (
               <Feedback key={question.index} feedback={state.feedback} onNext={() => void advance()} />
             )}
           </div>
+          {/* Stays mounted from question to feedback so the verdict is announced as a change. */}
+          <p className="sr-only" role="status">
+            {state.phase === "feedback" ? feedbackAnnouncement(state.feedback) : ""}
+          </p>
         </TerminalWindow>
       );
     }
@@ -109,10 +122,23 @@ export function GameScreen() {
               {state.message}
             </p>
             <div className="flex flex-wrap gap-3">
+              {state.sessionId !== undefined && (
+                <button
+                  type="button"
+                  onClick={() => void resume()}
+                  className="min-h-11 rounded-lg bg-accent px-4 py-2 font-semibold text-bg hover:opacity-90"
+                >
+                  Continuar partida
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => void start()}
-                className="min-h-11 rounded-lg bg-accent px-4 py-2 font-semibold text-bg hover:opacity-90"
+                className={
+                  state.sessionId !== undefined
+                    ? "min-h-11 rounded-lg border border-border px-4 py-2 hover:border-accent"
+                    : "min-h-11 rounded-lg bg-accent px-4 py-2 font-semibold text-bg hover:opacity-90"
+                }
               >
                 Jogar de novo
               </button>
