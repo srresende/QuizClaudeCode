@@ -1,0 +1,364 @@
+[
+  {
+    "id": "fund-facil-01",
+    "category": "fundamentos",
+    "difficulty": "facil",
+    "statement": "O Claude Code é uma ferramenta de programação agêntica da Anthropic que pode ser usada diretamente no terminal.",
+    "answer": true,
+    "explanation": "O Claude Code nasceu como uma ferramenta de linha de comando: você conversa com ele no terminal e ele atua no seu projeto lendo arquivos, editando código e rodando comandos."
+  },
+  {
+    "id": "fund-facil-02",
+    "category": "fundamentos",
+    "difficulty": "facil",
+    "statement": "O Claude Code só funciona com projetos escritos em JavaScript ou TypeScript.",
+    "answer": false,
+    "explanation": "O Claude Code é agnóstico de linguagem: funciona com Python, Java, Go, Rust, C#, PHP e praticamente qualquer base de código baseada em texto."
+  },
+  {
+    "id": "fund-facil-03",
+    "category": "fundamentos",
+    "difficulty": "facil",
+    "statement": "O Claude Code consegue ler arquivos, editar código e executar comandos no terminal do seu projeto.",
+    "answer": true,
+    "explanation": "Essa é a essência de um agente de código: ele usa ferramentas para explorar o repositório, alterar arquivos e executar comandos como testes e builds."
+  },
+  {
+    "id": "fund-facil-04",
+    "category": "fundamentos",
+    "difficulty": "facil",
+    "statement": "Para usar o Claude Code é obrigatório abandonar sua IDE e trabalhar exclusivamente pelo terminal.",
+    "answer": false,
+    "explanation": "Além do terminal, o Claude Code tem integrações com IDEs como VS Code e JetBrains, além de app desktop e versão web."
+  },
+  {
+    "id": "fund-facil-05",
+    "category": "fundamentos",
+    "difficulty": "facil",
+    "statement": "Por padrão, o Claude Code pede sua permissão antes de editar arquivos ou executar comandos de shell.",
+    "answer": true,
+    "explanation": "O modo de permissão padrão é conservador: ações que alteram o sistema exigem aprovação, e você pode liberar ações específicas conforme ganha confiança."
+  },
+  {
+    "id": "fund-medio-01",
+    "category": "fundamentos",
+    "difficulty": "medio",
+    "statement": "O arquivo CLAUDE.md é carregado automaticamente no contexto e serve para dar instruções e informações persistentes sobre o projeto.",
+    "answer": true,
+    "explanation": "O CLAUDE.md funciona como a memória do projeto: comandos de build, convenções de código e regras do time ficam ali e são lidos no início de cada sessão."
+  },
+  {
+    "id": "fund-medio-02",
+    "category": "fundamentos",
+    "difficulty": "medio",
+    "statement": "O Claude Code só pode ser usado com chave de API cobrada por uso; assinaturas como Claude Pro ou Max não dão acesso a ele.",
+    "answer": false,
+    "explanation": "O Claude Code pode ser usado tanto com assinaturas do Claude (como Pro e Max, além de planos de equipe) quanto com cobrança por uso via API."
+  },
+  {
+    "id": "fund-medio-03",
+    "category": "fundamentos",
+    "difficulty": "medio",
+    "statement": "O comando /init analisa o código e gera um arquivo CLAUDE.md inicial para o projeto.",
+    "answer": true,
+    "explanation": "O /init é o atalho para começar: o Claude explora o repositório e escreve um CLAUDE.md com a estrutura, comandos e convenções que encontrou."
+  },
+  {
+    "id": "fund-medio-04",
+    "category": "fundamentos",
+    "difficulty": "medio",
+    "statement": "A janela de contexto do Claude Code é ilimitada, então o tamanho da conversa nunca afeta a sessão.",
+    "answer": false,
+    "explanation": "O contexto é finito. Conversas longas consomem espaço e podem degradar o foco; por isso existem recursos como /compact, /clear e a compactação automática."
+  },
+  {
+    "id": "fund-medio-05",
+    "category": "fundamentos",
+    "difficulty": "medio",
+    "statement": "Executar `claude --continue` (ou `claude -c`) retoma a conversa mais recente.",
+    "answer": true,
+    "explanation": "O --continue retoma a última sessão do diretório atual, e o --resume permite escolher qual sessão anterior retomar."
+  },
+  {
+    "id": "fund-dificil-01",
+    "category": "fundamentos",
+    "difficulty": "dificil",
+    "statement": "Configurações do usuário (~/.claude/settings.json) têm precedência sobre as configurações do projeto (.claude/settings.json).",
+    "answer": false,
+    "explanation": "É o contrário: configurações mais específicas vencem. A ordem vai de políticas gerenciadas pela empresa, passando por argumentos de linha de comando, settings local e compartilhado do projeto, até o settings do usuário."
+  },
+  {
+    "id": "fund-dificil-02",
+    "category": "fundamentos",
+    "difficulty": "dificil",
+    "statement": "Nas regras de permissão, uma regra de deny prevalece sobre uma regra de allow que cubra a mesma ação.",
+    "answer": true,
+    "explanation": "Regras de negação são avaliadas antes das de permissão. Isso permite liberar um conjunto amplo de comandos e ainda bloquear casos específicos."
+  },
+  {
+    "id": "fund-dificil-03",
+    "category": "fundamentos",
+    "difficulty": "dificil",
+    "statement": "O arquivo .claude/settings.local.json é destinado a preferências pessoais e não deve ser versionado no Git.",
+    "answer": true,
+    "explanation": "O settings.local.json guarda ajustes individuais naquele projeto; o Claude Code o configura para ser ignorado pelo Git. O que é do time vai em .claude/settings.json."
+  },
+  {
+    "id": "fund-dificil-04",
+    "category": "fundamentos",
+    "difficulty": "dificil",
+    "statement": "Todos os arquivos CLAUDE.md em subdiretórios do projeto são carregados integralmente ao iniciar a sessão, não importa onde o Claude esteja trabalhando.",
+    "answer": false,
+    "explanation": "Os CLAUDE.md acima do diretório atual são carregados na inicialização; os de subdiretórios são incluídos sob demanda, quando o Claude passa a trabalhar com arquivos daquela pasta."
+  },
+  {
+    "id": "fund-dificil-05",
+    "category": "fundamentos",
+    "difficulty": "dificil",
+    "statement": "Um CLAUDE.md pode importar o conteúdo de outros arquivos usando a sintaxe @caminho/do/arquivo.",
+    "answer": true,
+    "explanation": "Importações com @ permitem manter o CLAUDE.md enxuto e reaproveitar documentos existentes, como um README ou um guia de estilo."
+  },
+
+  {
+    "id": "feat-facil-01",
+    "category": "features",
+    "difficulty": "facil",
+    "statement": "No prompt do Claude Code é possível referenciar um arquivo digitando @ seguido do caminho.",
+    "answer": true,
+    "explanation": "Mencionar arquivos com @ coloca o conteúdo diretamente no contexto e evita que o Claude precise procurá-los."
+  },
+  {
+    "id": "feat-facil-02",
+    "category": "features",
+    "difficulty": "facil",
+    "statement": "O comando /clear apaga os arquivos do seu projeto.",
+    "answer": false,
+    "explanation": "O /clear limpa apenas o histórico da conversa, começando um contexto novo. Seus arquivos não são afetados."
+  },
+  {
+    "id": "feat-facil-03",
+    "category": "features",
+    "difficulty": "facil",
+    "statement": "Pressionar Esc interrompe o Claude durante uma tarefa sem perder o histórico da conversa.",
+    "answer": true,
+    "explanation": "O Esc para o trabalho em andamento para que você corrija o rumo; a conversa continua de onde parou."
+  },
+  {
+    "id": "feat-facil-04",
+    "category": "features",
+    "difficulty": "facil",
+    "statement": "O Claude Code só consegue trabalhar em um arquivo por vez.",
+    "answer": false,
+    "explanation": "O Claude Code faz mudanças coordenadas em vários arquivos, como renomear uma função em todo o projeto ou implementar uma feature de ponta a ponta."
+  },
+  {
+    "id": "feat-facil-05",
+    "category": "features",
+    "difficulty": "facil",
+    "statement": "É possível colar ou arrastar uma imagem, como um screenshot ou mockup, para o prompt do Claude Code.",
+    "answer": true,
+    "explanation": "O Claude entende imagens: você pode enviar prints de erros ou designs para ele analisar e implementar."
+  },
+  {
+    "id": "feat-medio-01",
+    "category": "features",
+    "difficulty": "medio",
+    "statement": "O comando /compact resume a conversa atual para liberar espaço no contexto, mantendo as informações principais.",
+    "answer": true,
+    "explanation": "O /compact substitui o histórico por um resumo. Você pode até passar instruções sobre o que priorizar no resumo."
+  },
+  {
+    "id": "feat-medio-02",
+    "category": "features",
+    "difficulty": "medio",
+    "statement": "No Plan Mode, o Claude já aplica as alterações nos arquivos enquanto monta o plano.",
+    "answer": false,
+    "explanation": "No Plan Mode o Claude apenas lê e analisa o código para propor um plano; nada é modificado até você aprovar e sair desse modo."
+  },
+  {
+    "id": "feat-medio-03",
+    "category": "features",
+    "difficulty": "medio",
+    "statement": "Comandos de barra personalizados só podem ser criados por meio de plugins pagos.",
+    "answer": false,
+    "explanation": "Você pode criar comandos e skills próprios com arquivos Markdown dentro da pasta .claude do projeto ou do usuário, sem custo extra."
+  },
+  {
+    "id": "feat-medio-04",
+    "category": "features",
+    "difficulty": "medio",
+    "statement": "O MCP (Model Context Protocol) permite conectar o Claude Code a ferramentas e fontes de dados externas, como bancos de dados e issue trackers.",
+    "answer": true,
+    "explanation": "O MCP é um protocolo aberto; ao adicionar um servidor MCP, o Claude ganha novas ferramentas para consultar e agir em sistemas externos."
+  },
+  {
+    "id": "feat-medio-05",
+    "category": "features",
+    "difficulty": "medio",
+    "statement": "O comando `claude -p \"sua pergunta\"` executa uma consulta de forma não interativa e imprime a resposta, o que é útil em scripts e CI.",
+    "answer": true,
+    "explanation": "O modo print (-p) é o modo headless: roda sem interface interativa e encerra ao terminar, ideal para automações e pipelines."
+  },
+  {
+    "id": "feat-dificil-01",
+    "category": "features",
+    "difficulty": "dificil",
+    "statement": "Um hook PreToolUse que termina com código de saída 2 bloqueia a chamada da ferramenta e devolve o stderr como feedback ao Claude.",
+    "answer": true,
+    "explanation": "O código 2 sinaliza bloqueio: a ferramenta não é executada e a mensagem em stderr é mostrada ao Claude para que ele ajuste o que está fazendo."
+  },
+  {
+    "id": "feat-dificil-02",
+    "category": "features",
+    "difficulty": "dificil",
+    "statement": "Subagentes compartilham a mesma janela de contexto da conversa principal.",
+    "answer": false,
+    "explanation": "Cada subagente roda com seu próprio contexto e devolve só o resultado à conversa principal, o que ajuda a manter o contexto principal limpo."
+  },
+  {
+    "id": "feat-dificil-03",
+    "category": "features",
+    "difficulty": "dificil",
+    "statement": "Servidores MCP com escopo de projeto ficam registrados no arquivo .mcp.json na raiz do repositório, que pode ser versionado para o time.",
+    "answer": true,
+    "explanation": "O escopo de projeto grava a configuração em .mcp.json, permitindo que todo o time use os mesmos servidores MCP (o Claude Code pede aprovação antes de usá-los)."
+  },
+  {
+    "id": "feat-dificil-04",
+    "category": "features",
+    "difficulty": "dificil",
+    "statement": "Os checkpoints do Claude Code permitem desfazer qualquer alteração, inclusive arquivos apagados por comandos bash como rm.",
+    "answer": false,
+    "explanation": "Os checkpoints rastreiam as edições feitas pelas ferramentas de edição do Claude. Mudanças feitas por comandos bash não são cobertas; para isso, conte com o Git."
+  },
+  {
+    "id": "feat-dificil-05",
+    "category": "features",
+    "difficulty": "dificil",
+    "statement": "No modo não interativo, a opção `--output-format json` permite obter a resposta do Claude em formato estruturado.",
+    "answer": true,
+    "explanation": "Com -p, os formatos text, json e stream-json facilitam integrar o Claude Code a scripts e outras ferramentas."
+  },
+
+  {
+    "id": "bp-facil-01",
+    "category": "boas-praticas",
+    "difficulty": "facil",
+    "statement": "Ser específico no prompt (quais arquivos, comportamento esperado, restrições) tende a gerar resultados melhores do que pedidos vagos.",
+    "answer": true,
+    "explanation": "Quanto mais contexto e critérios claros, menos o Claude precisa adivinhar, e menos idas e vindas são necessárias."
+  },
+  {
+    "id": "bp-facil-02",
+    "category": "boas-praticas",
+    "difficulty": "facil",
+    "statement": "Como o Claude Code é muito capaz, não é necessário revisar as alterações antes de fazer commit.",
+    "answer": false,
+    "explanation": "Você continua responsável pelo código. Revisar diffs, rodar testes e entender as mudanças é parte essencial do fluxo."
+  },
+  {
+    "id": "bp-facil-03",
+    "category": "boas-praticas",
+    "difficulty": "facil",
+    "statement": "É uma boa prática colocar senhas e chaves de API no CLAUDE.md para que o Claude possa usá-las.",
+    "answer": false,
+    "explanation": "O CLAUDE.md costuma ser versionado e compartilhado. Segredos devem ficar em variáveis de ambiente ou gerenciadores de segredos, nunca nele."
+  },
+  {
+    "id": "bp-facil-04",
+    "category": "boas-praticas",
+    "difficulty": "facil",
+    "statement": "Usar /clear ao mudar para uma tarefa não relacionada ajuda a manter o contexto limpo e focado.",
+    "answer": true,
+    "explanation": "Contexto acumulado de outra tarefa pode distrair o Claude e gastar espaço; começar limpo costuma dar respostas melhores."
+  },
+  {
+    "id": "bp-facil-05",
+    "category": "boas-praticas",
+    "difficulty": "facil",
+    "statement": "Usar Git junto com o Claude Code facilita revisar e reverter mudanças.",
+    "answer": true,
+    "explanation": "Commits frequentes criam pontos seguros de retorno e deixam claro o que o Claude alterou em cada etapa."
+  },
+  {
+    "id": "bp-medio-01",
+    "category": "boas-praticas",
+    "difficulty": "medio",
+    "statement": "Um fluxo recomendado para tarefas complexas é: explorar o código, planejar, implementar e então commitar.",
+    "answer": true,
+    "explanation": "Separar exploração e planejamento da implementação evita que o Claude parta direto para o código sem entender o problema."
+  },
+  {
+    "id": "bp-medio-02",
+    "category": "boas-praticas",
+    "difficulty": "medio",
+    "statement": "Quanto maior o CLAUDE.md, melhor: o ideal é colar nele toda a documentação do projeto.",
+    "answer": false,
+    "explanation": "O CLAUDE.md é carregado em toda sessão e consome contexto. Ele deve ser conciso, com o que realmente importa; detalhes podem ficar em arquivos referenciados."
+  },
+  {
+    "id": "bp-medio-03",
+    "category": "boas-praticas",
+    "difficulty": "medio",
+    "statement": "Dar ao Claude uma forma de verificar o próprio trabalho, como testes ou screenshots, melhora a qualidade dos resultados.",
+    "answer": true,
+    "explanation": "Com um critério verificável, o Claude consegue iterar sozinho até acertar, em vez de entregar algo que apenas parece correto."
+  },
+  {
+    "id": "bp-medio-04",
+    "category": "boas-praticas",
+    "difficulty": "medio",
+    "statement": "Manter uma única sessão longa para todas as tarefas do dia costuma melhorar o desempenho do Claude.",
+    "answer": false,
+    "explanation": "Sessões longas acumulam contexto irrelevante. Sessões focadas por tarefa, com /clear entre elas, tendem a funcionar melhor."
+  },
+  {
+    "id": "bp-medio-05",
+    "category": "boas-praticas",
+    "difficulty": "medio",
+    "statement": "Em TDD com o Claude, uma boa prática é escrever os testes primeiro, confirmar que falham e então pedir a implementação sem alterar os testes.",
+    "answer": true,
+    "explanation": "Testes como alvo fixo dão ao Claude um critério objetivo de sucesso e impedem que ele 'ajuste' os testes para passar."
+  },
+  {
+    "id": "bp-dificil-01",
+    "category": "boas-praticas",
+    "difficulty": "dificil",
+    "statement": "Usar `--dangerously-skip-permissions` no dia a dia, na sua máquina principal, é recomendado para ganhar velocidade.",
+    "answer": false,
+    "explanation": "Pular todas as permissões só é recomendado em ambientes isolados, como containers sem acesso a dados sensíveis. Na máquina principal, prefira regras de allow específicas."
+  },
+  {
+    "id": "bp-dificil-02",
+    "category": "boas-praticas",
+    "difficulty": "dificil",
+    "statement": "Git worktrees permitem rodar várias sessões do Claude Code em paralelo, em branches diferentes, sem que uma sobrescreva os arquivos da outra.",
+    "answer": true,
+    "explanation": "Cada worktree é um diretório de trabalho separado do mesmo repositório, então cada sessão edita sua própria cópia dos arquivos."
+  },
+  {
+    "id": "bp-dificil-03",
+    "category": "boas-praticas",
+    "difficulty": "dificil",
+    "statement": "Hooks são executados com as permissões do seu usuário, por isso é importante revisar hooks de terceiros antes de habilitá-los.",
+    "answer": true,
+    "explanation": "Um hook é um comando de shell rodando automaticamente na sua máquina; um hook malicioso ou mal escrito pode ler ou alterar qualquer coisa a que você tenha acesso."
+  },
+  {
+    "id": "bp-dificil-04",
+    "category": "boas-praticas",
+    "difficulty": "dificil",
+    "statement": "Liberar todos os comandos Bash sem restrição no settings.json compartilhado do projeto é a forma recomendada de reduzir pedidos de permissão.",
+    "answer": false,
+    "explanation": "O recomendado é liberar comandos específicos e seguros (como os de teste e lint) e manter negações para ações sensíveis, em vez de abrir tudo."
+  },
+  {
+    "id": "bp-dificil-05",
+    "category": "boas-praticas",
+    "difficulty": "dificil",
+    "statement": "Para algo que precisa acontecer sempre, como rodar o formatador após cada edição, uma instrução no CLAUDE.md é mais garantida do que um hook.",
+    "answer": false,
+    "explanation": "Instruções no CLAUDE.md orientam o modelo, mas não são determinísticas. Hooks são executados pelo próprio Claude Code em todo evento configurado, garantindo o comportamento."
+  }
+]
